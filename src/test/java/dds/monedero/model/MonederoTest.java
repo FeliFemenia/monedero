@@ -53,7 +53,7 @@ public class MonederoTest {
   @DisplayName("No es posible extraer más que el saldo disponible")
   void ExtraerMasQueElSaldo() {
     assertThrows(SaldoMenorException.class, () -> {
-      cuenta.setSaldo(90);
+      cuenta.poner(90);
       cuenta.sacar(1001);
     });
   }
@@ -62,7 +62,7 @@ public class MonederoTest {
   @DisplayName("No es posible extraer más que el límite diario")
   void ExtraerMasDe1000() {
     assertThrows(MaximoExtraccionDiarioException.class, () -> {
-      cuenta.setSaldo(5000);
+      cuenta.poner(5000);
       cuenta.sacar(1001);
     });
   }

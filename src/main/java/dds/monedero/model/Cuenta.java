@@ -79,19 +79,12 @@ public class Cuenta {
   }
 
   public List<Movimiento> obtenerExtraccionesA(LocalDate fecha) {
-    return this.movimientos.stream().filter(movimiento -> !movimiento.fueDepositado(fecha)).toList();
-  }
-
-  public void setMovimientos(List<Movimiento> movimientos) {
-    this.movimientos = movimientos;
+    return this.movimientos.stream().filter(movimiento -> movimiento.fueExtraido(fecha)).toList();
   }
 
   public double getSaldo() {
     return saldo;
   }
 
-//  //public void setSaldo(double saldo) {
-//    this.saldo = saldo;
-//  }
 
 }
