@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Code smells:
-//1. tener setters y getters cuando son variables privadas. Usar this.algo en lugar de getAlgo()
+
 
 //3. metodo agregateA() creo q es una responsabilidad de la cuenta y no del movimiento.
 //4. repeticion de codigo en el metodo poner y sacar.
@@ -29,9 +29,7 @@ public class Cuenta {
   }
 
   public void poner(double monto) {
-    if (monto <= 0) {
-      throw new MontoNegativoException(monto + ": el monto a ingresar debe ser un valor positivo");
-    }
+    this.verificarMonto(monto);
 
     if (this.movimientos.stream()
         .filter(movimiento -> movimiento.fueDepositado(LocalDate.now()))
@@ -43,9 +41,8 @@ public class Cuenta {
   }
 
   public void sacar(double monto) {
-    if (monto <= 0) {
-      throw new MontoNegativoException(monto + ": el monto a ingresar debe ser un valor positivo");
-    }
+    this.verificarMonto(monto);
+
     if (getSaldo() - monto < 0) {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
@@ -56,6 +53,12 @@ public class Cuenta {
           "No puede extraer mas de $ " + 1000 + " diarios, " + "límite: " + limite);
     }
     new Movimiento(LocalDate.now(), monto, false).agregateA(this);
+  }
+
+  public void verificarMonto(double monto) {
+    if (monto <= 0) {
+      throw new MontoNegativoException(monto + ": el monto a ingresar debe ser un valor positivo");
+    }
   }
 
   public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
