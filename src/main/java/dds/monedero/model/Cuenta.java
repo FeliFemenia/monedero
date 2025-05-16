@@ -26,7 +26,7 @@ public class Cuenta {
     validarMontonNegativo(cuanto);
     validarDepositosDiarios();
 
-    this.agregateA(new Deposito(LocalDate.now(), cuanto));
+    this.agregarMovimiento(new Deposito(LocalDate.now(), cuanto));
   }
 
   private void validarDepositosDiarios() {
@@ -48,7 +48,7 @@ public class Cuenta {
     validarSaldoDisponible(cuanto);
     validarLimiteDiario(cuanto);
 
-    this.agregateA(new Extraccion(LocalDate.now(), cuanto));
+    this.agregarMovimiento(new Extraccion(LocalDate.now(), cuanto));
   }
 
   private void validarLimiteDiario(double cuanto) {
@@ -67,18 +67,14 @@ public class Cuenta {
   }
 
   public void agregarMovimiento(Movimiento movimiento) {
-
+    this.modificarSaldo(movimiento);
     movimientos.add(movimiento);
   }
 
-//  public void modificarSaldo(Movimiento movimiento) {
-//    this.setSaldo(movimiento.calcularValor(this));
-//  }
-
-  public void agregateA(Movimiento movimiento) {
+  public void modificarSaldo(Movimiento movimiento) {
     this.setSaldo(movimiento.calcularValor(this));
-    this.agregarMovimiento(movimiento);
   }
+
 
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
