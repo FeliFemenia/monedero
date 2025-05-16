@@ -72,7 +72,7 @@ public class Cuenta {
   }
 
   public void modificarSaldo(Movimiento movimiento) {
-    this.setSaldo(movimiento.calcularValor(this));
+    this.setSaldo(movimiento.calcularValor(this.saldo));
   }
 
 

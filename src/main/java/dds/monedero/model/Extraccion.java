@@ -13,7 +13,7 @@ public class Extraccion extends Movimiento{
   }
 
   @Override
-  public double calcularValor(Cuenta cuenta) {
-    return cuenta.getSaldo() - getMonto();
+  public double calcularValor(double saldo) {
+    return saldo - getMonto();
   }
 }

@@ -40,5 +40,5 @@ public abstract class Movimiento {
     return !isDeposito();
   }
 
-  public abstract double calcularValor(Cuenta cuenta);
+  public abstract double calcularValor(double saldo);
 }
