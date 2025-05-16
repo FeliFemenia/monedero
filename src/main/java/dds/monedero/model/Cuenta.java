@@ -24,14 +24,17 @@ public class Cuenta {
 
   public void depositar(double cuanto) {
     validarMontonNegativo(cuanto);
+    validarDepositosDiarios();
 
+    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
+  }
+
+  private void validarDepositosDiarios() {
     if (getMovimientos().stream()
         .filter(movimiento -> movimiento.fueDepositado(LocalDate.now()))
         .count() >= 3) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
-
-    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
 
   private static void validarMontonNegativo(double cuanto) {
