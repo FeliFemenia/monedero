@@ -13,7 +13,7 @@ import java.util.List;
 
 
 //3. metodo agregateA() creo q es una responsabilidad de la cuenta y no del movimiento.
-//4. repeticion de codigo en el metodo poner y sacar.
+
 
 public class Cuenta {
 
@@ -43,9 +43,10 @@ public class Cuenta {
   public void sacar(double monto) {
     this.verificarMonto(monto);
 
-    if (getSaldo() - monto < 0) {
+    if (this.saldo - monto < 0) {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
+
     var montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
     var limite = 1000 - montoExtraidoHoy;
     if (monto > limite) {
