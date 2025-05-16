@@ -22,22 +22,22 @@ public class MonederoTest {
   @Test
   @DisplayName("Es posible poner $1500 en una cuenta vacía")
   void Poner() {
-    cuenta.poner(1500);
+    cuenta.depositar(1500);
     assertEquals(1500, cuenta.getSaldo());
   }
 
   @Test
   @DisplayName("No es posible poner montos negativos")
   void PonerMontoNegativo() {
-    assertThrows(MontoNegativoException.class, () -> cuenta.poner(-1500));
+    assertThrows(MontoNegativoException.class, () -> cuenta.depositar(-1500));
   }
 
   @Test
   @DisplayName("Es posible realizar múltiples depósitos consecutivos")
   void TresDepositos() {
-    cuenta.poner(1500);
-    cuenta.poner(456);
-    cuenta.poner(1900);
+    cuenta.depositar(1500);
+    cuenta.depositar(456);
+    cuenta.depositar(1900);
     assertEquals(3, cuenta.getMovimientos().size());
   }
 
@@ -45,10 +45,10 @@ public class MonederoTest {
   @DisplayName("No es posible superar la máxima cantidad de depositos diarios")
   void MasDeTresDepositos() {
     assertThrows(MaximaCantidadDepositosException.class, () -> {
-      cuenta.poner(1500);
-      cuenta.poner(456);
-      cuenta.poner(1900);
-      cuenta.poner(245);
+      cuenta.depositar(1500);
+      cuenta.depositar(456);
+      cuenta.depositar(1900);
+      cuenta.depositar(245);
     });
   }
 
@@ -57,7 +57,7 @@ public class MonederoTest {
   void ExtraerMasQueElSaldo() {
     assertThrows(SaldoMenorException.class, () -> {
       cuenta.setSaldo(90);
-      cuenta.sacar(1001);
+      cuenta.extraer(1001);
     });
   }
 
@@ -66,14 +66,21 @@ public class MonederoTest {
   void ExtraerMasDe1000() {
     assertThrows(MaximoExtraccionDiarioException.class, () -> {
       cuenta.setSaldo(5000);
-      cuenta.sacar(1001);
+      cuenta.extraer(1001);
     });
   }
 
   @Test
   @DisplayName("No es posible extraer un monto negativo")
   void ExtraerMontoNegativo() {
-    assertThrows(MontoNegativoException.class, () -> cuenta.sacar(-500));
+    assertThrows(MontoNegativoException.class, () -> cuenta.extraer(-500));
   }
 
+  @Test
+  @DisplayName("Se extrae 100 pesos")
+  void Extraer100Pesos() {
+    cuenta.setSaldo(200);
+    cuenta.extraer(100);
+    assertEquals(100, cuenta.getSaldo());
+  }
 }
