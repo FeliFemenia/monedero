@@ -22,69 +22,62 @@ public class Cuenta {
     saldo = montoInicial;
   }
 
-  public void poner(double monto) {
-    this.verificarMonto(monto);
+  public void poner(double cuanto) {
+    if (cuanto <= 0) {
+      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
+    }
 
-    if (this.obtenerDepositosA(LocalDate.now()).size() >= 3) {
+    if (getMovimientos().stream()
+        .filter(movimiento -> movimiento.fueDepositado(LocalDate.now()))
+        .count() >= 3) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
 
-    this.agregarMovimiento(LocalDate.now(), monto, true);
+    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
 
-  public void sacar(double monto) {
-    this.verificarMonto(monto);
-
-    if (this.saldo - monto < 0) {
+  public void sacar(double cuanto) {
+    if (cuanto <= 0) {
+      throw new MontoNegativoException(cuanto + ": el monto a ingresar debe ser un valor positivo");
+    }
+    if (getSaldo() - cuanto < 0) {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
-
-    var limite = 1000 - this.getMontoExtraidoA(LocalDate.now());
-    if (monto > limite) {
+    var montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
+    var limite = 1000 - montoExtraidoHoy;
+    if (cuanto > limite) {
       throw new MaximoExtraccionDiarioException(
           "No puede extraer mas de $ " + 1000 + " diarios, " + "límite: " + limite);
     }
-
-    this.agregarMovimiento(LocalDate.now(), monto, false);
-  }
-
-  public void verificarMonto(double monto) {
-    if (monto <= 0) {
-      throw new MontoNegativoException(monto + ": el monto a ingresar debe ser un valor positivo");
-    }
-  }
-
-  public void modificarSaldo(Movimiento movimiento) {
-    if (movimiento.fueDepositado(LocalDate.now())) {
-      this.saldo = this.saldo + movimiento.getMonto();
-    } else {
-      this.saldo = this.saldo - movimiento.getMonto();
-    }
+    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
   }
 
   public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
     var movimiento = new Movimiento(fecha, cuanto, esDeposito);
-    this.modificarSaldo(movimiento);
     movimientos.add(movimiento);
   }
 
   public double getMontoExtraidoA(LocalDate fecha) {
-    return this.obtenerExtraccionesA(fecha).stream().mapToDouble(Movimiento::getMonto)
+    return getMovimientos().stream()
+        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
+        .mapToDouble(Movimiento::getMonto)
         .sum();
   }
 
-  public List<Movimiento> obtenerDepositosA(LocalDate fecha) {
-    return this.movimientos.stream()
-        .filter(movimiento -> movimiento.fueDepositado(LocalDate.now())).toList();
+  public List<Movimiento> getMovimientos() {
+    return movimientos;
   }
 
-  public List<Movimiento> obtenerExtraccionesA(LocalDate fecha) {
-    return this.movimientos.stream().filter(movimiento -> movimiento.fueExtraido(fecha)).toList();
+  public void setMovimientos(List<Movimiento> movimientos) {
+    this.movimientos = movimientos;
   }
 
   public double getSaldo() {
     return saldo;
   }
 
+  public void setSaldo(double saldo) {
+    this.saldo = saldo;
+  }
 
 }
