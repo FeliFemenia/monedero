@@ -25,9 +25,7 @@ public class Cuenta {
   public void poner(double monto) {
     this.verificarMonto(monto);
 
-    if (this.movimientos.stream()
-        .filter(movimiento -> movimiento.fueDepositado(LocalDate.now()))
-        .count() >= 3) {
+    if (this.obtenerDepositosA(LocalDate.now()).size() >= 3) {
       throw new MaximaCantidadDepositosException("Ya excedio los " + 3 + " depositos diarios");
     }
 
@@ -41,7 +39,7 @@ public class Cuenta {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
 
-    var limite = 1000 - getMontoExtraidoA(LocalDate.now());
+    var limite = 1000 - this.getMontoExtraidoA(LocalDate.now());
     if (monto > limite) {
       throw new MaximoExtraccionDiarioException(
           "No puede extraer mas de $ " + 1000 + " diarios, " + "límite: " + limite);
@@ -71,10 +69,17 @@ public class Cuenta {
   }
 
   public double getMontoExtraidoA(LocalDate fecha) {
-    return this.movimientos.stream()
-        .filter(movimiento -> !movimiento.fueDepositado(fecha))
-        .mapToDouble(Movimiento::getMonto)
+    return this.obtenerExtraccionesA(fecha).stream().mapToDouble(Movimiento::getMonto)
         .sum();
+  }
+
+  public List<Movimiento> obtenerDepositosA(LocalDate fecha) {
+    return this.movimientos.stream()
+        .filter(movimiento -> movimiento.fueDepositado(LocalDate.now())).toList();
+  }
+
+  public List<Movimiento> obtenerExtraccionesA(LocalDate fecha) {
+    return this.movimientos.stream().filter(movimiento -> !movimiento.fueDepositado(fecha)).toList();
   }
 
   public void setMovimientos(List<Movimiento> movimientos) {
