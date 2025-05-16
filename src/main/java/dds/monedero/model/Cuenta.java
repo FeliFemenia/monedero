@@ -47,7 +47,7 @@ public class Cuenta {
           "No puede extraer mas de $ " + 1000 + " diarios, " + "límite: " + limite);
     }
 
-    new Movimiento(LocalDate.now(), monto, false).agregateA(this);
+    this.agregarMovimiento(LocalDate.now(), monto, false);
   }
 
   public void verificarMonto(double monto) {
@@ -56,8 +56,17 @@ public class Cuenta {
     }
   }
 
+  public void modificarSaldo(Movimiento movimiento) {
+    if (movimiento.fueDepositado(LocalDate.now())) {
+      this.saldo = this.saldo + movimiento.getMonto();
+    } else {
+      this.saldo = this.saldo - movimiento.getMonto();
+    }
+  }
+
   public void agregarMovimiento(LocalDate fecha, double cuanto, boolean esDeposito) {
     var movimiento = new Movimiento(fecha, cuanto, esDeposito);
+    this.modificarSaldo(movimiento);
     movimientos.add(movimiento);
   }
 
@@ -76,8 +85,8 @@ public class Cuenta {
     return saldo;
   }
 
-  public void setSaldo(double saldo) {
-    this.saldo = saldo;
-  }
+//  //public void setSaldo(double saldo) {
+//    this.saldo = saldo;
+//  }
 
 }
