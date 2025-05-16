@@ -26,7 +26,7 @@ public class Cuenta {
     validarMontonNegativo(cuanto);
     validarDepositosDiarios();
 
-    new Deposito(LocalDate.now(), cuanto, true).agregateA(this);
+    new Deposito(LocalDate.now(), cuanto).agregateA(this);
   }
 
   private void validarDepositosDiarios() {
@@ -48,7 +48,7 @@ public class Cuenta {
     validarSaldoDisponible(cuanto);
     validarLimiteDiario(cuanto);
 
-    new Extraccion(LocalDate.now(), cuanto, false).agregateA(this);
+    new Extraccion(LocalDate.now(), cuanto).agregateA(this);
   }
 
   private void validarLimiteDiario(double cuanto) {
