@@ -9,12 +9,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-//Code smells:
-
-
-//3. metodo agregateA() creo q es una responsabilidad de la cuenta y no del movimiento.
-
-
 public class Cuenta {
 
   private double saldo = 0;
@@ -69,7 +63,7 @@ public class Cuenta {
 
   public double getMontoExtraidoA(LocalDate fecha) {
     return this.movimientos.stream()
-        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
+        .filter(movimiento -> !movimiento.fueDepositado(fecha))
         .mapToDouble(Movimiento::getMonto)
         .sum();
   }
