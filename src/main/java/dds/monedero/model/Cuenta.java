@@ -46,9 +46,8 @@ public class Cuenta {
     if (this.saldo - monto < 0) {
       throw new SaldoMenorException("No puede sacar mas de " + getSaldo() + " $");
     }
-
-    var montoExtraidoHoy = getMontoExtraidoA(LocalDate.now());
-    var limite = 1000 - montoExtraidoHoy;
+    
+    var limite = 1000 - getMontoExtraidoA(LocalDate.now());
     if (monto > limite) {
       throw new MaximoExtraccionDiarioException(
           "No puede extraer mas de $ " + 1000 + " diarios, " + "límite: " + limite);
