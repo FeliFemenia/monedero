@@ -16,4 +16,9 @@ public class Deposito extends Movimiento{
   public double calcularValor(double saldo) {
     return saldo + getMonto();
   }
+
+  @Override
+  public double getMontoExtraccion() {
+    return 0;
+  }
 }

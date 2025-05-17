@@ -16,4 +16,9 @@ public class Extraccion extends Movimiento{
   public double calcularValor(double saldo) {
     return saldo - getMonto();
   }
+
+  @Override
+  public double getMontoExtraccion() {
+    return this.getMonto();
+  }
 }

@@ -41,4 +41,6 @@ public abstract class Movimiento {
   }
 
   public abstract double calcularValor(double saldo);
+
+  public abstract double getMontoExtraccion();
 }

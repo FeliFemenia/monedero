@@ -75,11 +75,10 @@ public class Cuenta {
     this.setSaldo(movimiento.calcularValor(this.saldo));
   }
 
-
   public double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
-        .filter(movimiento -> !movimiento.isDeposito() && movimiento.getFecha().equals(fecha))
-        .mapToDouble(Movimiento::getMonto)
+        .filter(movimiento -> movimiento.getFecha().equals(fecha))
+        .mapToDouble(Movimiento::getMontoExtraccion)
         .sum();
   }
 
