@@ -86,10 +86,6 @@ public class Cuenta {
     return movimientos;
   }
 
-  public void setMovimientos(List<Movimiento> movimientos) {
-    this.movimientos = movimientos;
-  }
-
   public double getSaldo() {
     return saldo;
   }
